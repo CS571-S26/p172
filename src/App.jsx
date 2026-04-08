@@ -1,34 +1,50 @@
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navigation from './components/Navigation';
+import HomePage from './components/HomePage';
+import SavedPage from './components/SavedPage';
+import './App.css';
+
 function App() {
+  const [savedListings, setSavedListings] = useState([]);
+
+  const handleSaveListing = (listing) => {
+    if (!savedListings.some(item => item.id === listing.id)) {
+      setSavedListings([...savedListings, listing]);
+    }
+  };
+
+  const handleRemoveListing = (listingId) => {
+    setSavedListings(savedListings.filter(item => item.id !== listingId));
+  };
+
   return (
-    <main style={{ fontFamily: "Arial, sans-serif", padding: "2rem", maxWidth: "900px", margin: "0 auto" }}>
-      <h1>BadgerLease</h1>
-      <p>
-        A specialized sublease marketplace for UW–Madison students.
-      </p>
-
-      <section>
-        <h2>About the Project</h2>
-        <p>
-          BadgerLease helps UW–Madison students find and advertise subleases in one centralized platform.
-          Students can browse listings, filter by rent, bedrooms, and amenities, and save favorite listings.
-        </p>
-      </section>
-
-      <section>
-        <h2>Planned Features</h2>
-        <ul>
-          <li>Create and manage sublease listings</li>
-          <li>Search and filter by price, bedrooms, and amenities</li>
-          <li>Save favorite listings</li>
-          <li>Student-focused housing marketplace for Madison</li>
-        </ul>
-      </section>
-
-      <section>
-        <h2>Project Status</h2>
-        <p>This is the initial published version of the CS571 web project.</p>
-      </section>
-    </main>
+    <Router>
+      <div className="bg-light min-vh-100 font-monospace" style={{ fontFamily: "'Inter', sans-serif" }}>
+        <Navigation savedCount={savedListings.length} />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <HomePage
+                savedListings={savedListings}
+                onSaveListing={handleSaveListing}
+              />
+            }
+          />
+          <Route
+            path="/saved"
+            element={
+              <SavedPage
+                savedListings={savedListings}
+                onRemoveListing={handleRemoveListing}
+              />
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

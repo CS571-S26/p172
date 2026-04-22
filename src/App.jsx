@@ -8,6 +8,7 @@ import SavedPage from './components/SavedPage';
 import AboutPage from './components/AboutPage';
 import Footer from './components/Footer';
 import CreateListingPage from './components/CreateListingPage';
+import ListingDetailPage from './components/ListingDetailPage';
 import './App.css';
 
 function App() {
@@ -59,6 +60,16 @@ function App() {
           <Route
             path="/create"
             element={<CreateListingPage onAddListing={handleAddListing} />}
+          />
+          <Route
+            path="/listings/:id"
+            element={
+              <ListingDetailPage
+                listings={listings}
+                savedListings={savedListings}
+                onSaveListing={handleSaveListing}
+              />
+            }
           />
         </Routes>
         <Footer />

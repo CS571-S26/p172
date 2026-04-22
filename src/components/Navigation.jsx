@@ -40,6 +40,11 @@ const Navigation = ({ savedCount }) => {
                         >
                             About
                         </Nav.Link>
+                        <Link to="/create" className="text-decoration-none ms-lg-3 mt-3 mt-lg-0">
+                            <span className="btn-premium px-4 py-2 d-inline-block">
+                                Post Listing ➕
+                            </span>
+                        </Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

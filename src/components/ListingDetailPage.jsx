@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Card, Badge, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Badge, Button, Carousel } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 
 const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
@@ -19,6 +19,7 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
     }
 
     const isSaved = savedListings.some((item) => item.id === listing.id);
+    const displayImages = listing.images && listing.images.length > 0 ? listing.images : ['https://picsum.photos/1200/800'];
 
     return (
         <Container className="py-5">
@@ -26,8 +27,20 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                 &larr; Back to Listings
             </Link>
             <Card className="glass-panel border-0 mt-3" style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                <div style={{ height: '350px', background: listing.imageUrl ? `url(${listing.imageUrl}) center/cover no-repeat` : 'linear-gradient(135deg, #e2e8f0, #cbd5e1)' }} className="position-relative">
-                    <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
+                <div style={{ height: '400px', backgroundColor: '#333' }} className="position-relative">
+                    <Carousel className="h-100" interval={null}>
+                        {displayImages.map((src, idx) => (
+                            <Carousel.Item key={idx} className="h-100">
+                                <img
+                                    className="d-block w-100 h-100"
+                                    style={{ objectFit: 'cover' }}
+                                    src={src}
+                                    alt={`Slide ${idx}`}
+                                />
+                            </Carousel.Item>
+                        ))}
+                    </Carousel>
+                    <div style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 10 }}>
                         <Badge className="premium-badge fs-5 px-4 py-2 shadow">{listing.bedrooms} Bedroom{listing.bedrooms > 1 ? 's' : ''}</Badge>
                     </div>
                 </div>

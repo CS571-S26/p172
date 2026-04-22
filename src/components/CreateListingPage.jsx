@@ -13,9 +13,22 @@ const CreateListingPage = ({ onAddListing }) => {
         description: '',
         startDate: '',
         endDate: '',
-        contactEmail: ''
+        contactEmail: '',
+        images: [] // Array of base64 strings or Object URLs
     });
     const [error, setError] = useState('');
+
+    const handleImageUpload = (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 5) {
+            setError('You can only upload up to 5 pictures.');
+            return;
+        }
+        setError('');
+
+        const imageUrls = files.map(file => URL.createObjectURL(file));
+        setFormData(prev => ({ ...prev, images: imageUrls }));
+    };
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,7 +52,7 @@ const CreateListingPage = ({ onAddListing }) => {
             startDate: formData.startDate,
             endDate: formData.endDate,
             contactEmail: formData.contactEmail,
-            imageUrl: `https://picsum.photos/seed/${Date.now()}/800/600`
+            images: formData.images.length > 0 ? formData.images : [`https://picsum.photos/seed/${Date.now()}/800/600`]
         };
 
         onAddListing(newListing);
@@ -156,6 +169,24 @@ const CreateListingPage = ({ onAddListing }) => {
                                         className="premium-input"
                                         required
                                     />
+                                </Form.Group>
+
+                                <Form.Group className="mb-4">
+                                    <Form.Label className="fw-semibold">Upload Photos (Up to 5)</Form.Label>
+                                    <Form.Control
+                                        type="file"
+                                        multiple
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="premium-input bg-white"
+                                    />
+                                    {formData.images.length > 0 && (
+                                        <div className="d-flex gap-2 mt-3 overflow-auto pb-2">
+                                            {formData.images.map((src, idx) => (
+                                                <img key={idx} src={src} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '12px' }} className="shadow-sm border border-secondary" />
+                                            ))}
+                                        </div>
+                                    )}
                                 </Form.Group>
 
                                 <Form.Group className="mb-4">

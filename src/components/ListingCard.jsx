@@ -3,11 +3,14 @@ import { Card, Button, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const ListingCard = ({ listing, onSave, isSaved }) => {
+  const displayImage = listing.images && listing.images.length > 0 ? listing.images[0] : 'https://picsum.photos/800/600';
+
   return (
     <Card className="h-100 premium-card">
-      <div className="premium-image-container" style={{ height: '200px', background: listing.imageUrl ? `url(${listing.imageUrl}) center/cover no-repeat` : 'linear-gradient(135deg, #e2e8f0, #cbd5e1)' }}>
+      <div className="premium-image-container position-relative" style={{ height: '220px', backgroundColor: '#e2e8f0' }}>
+        <img src={displayImage} alt="Listing cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
-          <Badge className="premium-badge shadow-sm">{listing.bedrooms} Bed</Badge>
+          <Badge className="premium-badge shadow-sm px-3 py-2 fs-6">{listing.bedrooms} Bed</Badge>
         </div>
       </div>
       <Card.Body className="d-flex flex-column p-4">

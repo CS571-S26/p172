@@ -5,7 +5,6 @@ import Navigation from './components/Navigation';
 import HomePage from './components/HomePage';
 import { DUMMY_LISTINGS } from './data';
 import SavedPage from './components/SavedPage';
-import AboutPage from './components/AboutPage';
 import Footer from './components/Footer';
 import CreateListingPage from './components/CreateListingPage';
 import ListingDetailPage from './components/ListingDetailPage';
@@ -52,10 +51,6 @@ function App() {
                 onRemoveListing={handleRemoveListing}
               />
             }
-          />
-          <Route
-            path="/about"
-            element={<AboutPage />}
           />
           <Route
             path="/create"

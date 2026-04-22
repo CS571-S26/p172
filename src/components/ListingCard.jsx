@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const ListingCard = ({ listing, onSave, isSaved }) => {
   return (
     <Card className="h-100 premium-card">
-      <div className="premium-image-container" style={{ height: '200px' }}>
+      <div className="premium-image-container" style={{ height: '200px', background: listing.imageUrl ? `url(${listing.imageUrl}) center/cover no-repeat` : 'linear-gradient(135deg, #e2e8f0, #cbd5e1)' }}>
         <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
           <Badge className="premium-badge shadow-sm">{listing.bedrooms} Bed</Badge>
         </div>
@@ -18,7 +18,8 @@ const ListingCard = ({ listing, onSave, isSaved }) => {
           <h5 className="mb-0 fw-bold ms-3" style={{ color: '#6366f1' }}>${listing.price}<span className="text-muted fw-normal" style={{ fontSize: '0.8rem' }}>/mo</span></h5>
         </div>
         <Card.Text className="text-secondary mb-3">
-          📍 {listing.location}
+          <div className="mb-1">📍 {listing.location}</div>
+          <div className="fw-semibold" style={{ fontSize: '0.9rem' }}>📅 {listing.startDate ? new Date(listing.startDate).toLocaleDateString() : 'TBD'} - {listing.endDate ? new Date(listing.endDate).toLocaleDateString() : 'TBD'}</div>
         </Card.Text>
         <div className="mb-4">
           {listing.amenities.map((amenity, index) => (

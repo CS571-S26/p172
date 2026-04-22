@@ -26,7 +26,7 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                 &larr; Back to Listings
             </Link>
             <Card className="glass-panel border-0 mt-3" style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                <div style={{ height: '350px', background: 'linear-gradient(135deg, #e2e8f0, #cbd5e1)' }} className="position-relative">
+                <div style={{ height: '350px', background: listing.imageUrl ? `url(${listing.imageUrl}) center/cover no-repeat` : 'linear-gradient(135deg, #e2e8f0, #cbd5e1)' }} className="position-relative">
                     <div style={{ position: 'absolute', bottom: '20px', right: '20px' }}>
                         <Badge className="premium-badge fs-5 px-4 py-2 shadow">{listing.bedrooms} Bedroom{listing.bedrooms > 1 ? 's' : ''}</Badge>
                     </div>
@@ -35,7 +35,10 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                     <Row>
                         <Col md={8}>
                             <h1 className="fw-bold text-dark mb-3" style={{ letterSpacing: '-1px' }}>{listing.title}</h1>
-                            <h4 className="text-muted mb-4">📍 {listing.location}</h4>
+                            <h4 className="text-muted mb-3">📍 {listing.location}</h4>
+                            <h5 className="text-primary mb-4 fw-bold">
+                                📅 Available: {listing.startDate ? new Date(listing.startDate).toLocaleDateString() : 'TBD'} - {listing.endDate ? new Date(listing.endDate).toLocaleDateString() : 'Flexible'}
+                            </h5>
 
                             <h5 className="fw-bold mt-5 mb-3">Amenities</h5>
                             <div className="d-flex flex-wrap mb-4">
@@ -72,8 +75,12 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                                     >
                                         {isSaved ? "✓ Saved to Favorites" : "Save to Favorites ❤️"}
                                     </Button>
-                                    <Button variant="dark" className="w-100 rounded-pill py-3 fw-bold fs-5 shadow-sm">
-                                        Contact Owner
+                                    <Button
+                                        variant="dark"
+                                        className="w-100 rounded-pill py-3 fw-bold fs-5 shadow-sm"
+                                        onClick={() => window.location.href = `mailto:${listing.contactEmail}?subject=Inquiry about ${listing.title}`}
+                                    >
+                                        Contact Owner ✉️
                                     </Button>
                                 </div>
                             </Card>

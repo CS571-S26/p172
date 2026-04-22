@@ -10,7 +10,10 @@ const CreateListingPage = ({ onAddListing }) => {
         bedrooms: '',
         location: '',
         amenities: '',
-        description: ''
+        description: '',
+        startDate: '',
+        endDate: '',
+        contactEmail: ''
     });
     const [error, setError] = useState('');
 
@@ -20,7 +23,7 @@ const CreateListingPage = ({ onAddListing }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (!formData.title || !formData.price || !formData.bedrooms || !formData.location) {
+        if (!formData.title || !formData.price || !formData.bedrooms || !formData.location || !formData.startDate || !formData.contactEmail) {
             setError('Please fill in all required fields.');
             return;
         }
@@ -32,7 +35,11 @@ const CreateListingPage = ({ onAddListing }) => {
             bedrooms: parseInt(formData.bedrooms),
             location: formData.location,
             amenities: formData.amenities.split(',').map(item => item.trim()).filter(item => item !== ''),
-            description: formData.description
+            description: formData.description,
+            startDate: formData.startDate,
+            endDate: formData.endDate,
+            contactEmail: formData.contactEmail,
+            imageUrl: `https://picsum.photos/seed/${Date.now()}/800/600`
         };
 
         onAddListing(newListing);
@@ -110,7 +117,48 @@ const CreateListingPage = ({ onAddListing }) => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group className="mb-5">
+                                <Row>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-4">
+                                            <Form.Label className="fw-semibold">Move In Date *</Form.Label>
+                                            <Form.Control
+                                                type="date"
+                                                name="startDate"
+                                                value={formData.startDate}
+                                                onChange={handleChange}
+                                                className="premium-input"
+                                                required
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md={6}>
+                                        <Form.Group className="mb-4">
+                                            <Form.Label className="fw-semibold">Move Out Date</Form.Label>
+                                            <Form.Control
+                                                type="date"
+                                                name="endDate"
+                                                value={formData.endDate}
+                                                onChange={handleChange}
+                                                className="premium-input"
+                                            />
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+
+                                <Form.Group className="mb-4">
+                                    <Form.Label className="fw-semibold">Contact Email *</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        name="contactEmail"
+                                        value={formData.contactEmail}
+                                        onChange={handleChange}
+                                        placeholder="owner@wisc.edu"
+                                        className="premium-input"
+                                        required
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-4">
                                     <Form.Label className="fw-semibold">Amenities (Comma separated)</Form.Label>
                                     <Form.Control
                                         type="text"

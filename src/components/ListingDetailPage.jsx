@@ -27,20 +27,20 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                 &larr; Back to Listings
             </Link>
             <Card className="glass-panel border-0 mt-3" style={{ borderRadius: '24px', overflow: 'hidden' }}>
-                <div style={{ height: '400px', backgroundColor: '#333' }} className="position-relative">
-                    <Carousel className="h-100" interval={null}>
+                <div className="position-relative bg-dark">
+                    <Carousel interval={null}>
                         {displayImages.map((src, idx) => (
-                            <Carousel.Item key={idx} className="h-100">
+                            <Carousel.Item key={idx}>
                                 <img
-                                    className="d-block w-100 h-100"
-                                    style={{ objectFit: 'cover' }}
+                                    className="d-block w-100"
+                                    style={{ height: '450px', objectFit: 'cover' }}
                                     src={src}
                                     alt={`Slide ${idx}`}
                                 />
                             </Carousel.Item>
                         ))}
                     </Carousel>
-                    <div style={{ position: 'absolute', bottom: '20px', right: '20px', zIndex: 10 }}>
+                    <div style={{ position: 'absolute', bottom: '25px', right: '25px', zIndex: 10 }}>
                         <Badge className="premium-badge fs-5 px-4 py-2 shadow">{listing.bedrooms} Bedroom{listing.bedrooms > 1 ? 's' : ''}</Badge>
                     </div>
                 </div>

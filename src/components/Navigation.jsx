@@ -33,6 +33,13 @@ const Navigation = ({ savedCount }) => {
                                 </Badge>
                             )}
                         </Nav.Link>
+                        <Nav.Link
+                            as={Link}
+                            to="/about"
+                            className={`fw-semibold mx-2 ${location.pathname === '/about' ? 'text-primary' : 'text-dark'}`}
+                        >
+                            About
+                        </Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

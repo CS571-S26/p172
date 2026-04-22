@@ -97,11 +97,11 @@ const HomePage = ({ savedListings, onSaveListing }) => {
     return (
         <div className="pt-4 pb-5">
             <Container>
-                <div className="mb-5 text-center">
-                    <h1 className="fw-bolder text-primary mb-3" style={{ fontSize: '3rem' }}>
-                        <span className="text-danger">Badger</span>Lease
+                <div className="hero-section mb-5">
+                    <h1 className="fw-bolder mb-3" style={{ fontSize: '3.5rem' }}>
+                        <span className="text-gradient-danger">Badger</span><span className="text-gradient-primary">Lease</span>
                     </h1>
-                    <p className="text-secondary fs-5 mb-0">UW-Madison's premier student sublease marketplace</p>
+                    <p className="fs-5 mb-0" style={{ color: '#475569', fontWeight: 500 }}>UW-Madison's premier student sublease marketplace</p>
                 </div>
 
                 <FilterPanel filters={filters} onFilterChange={setFilters} />

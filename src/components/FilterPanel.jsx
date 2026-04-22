@@ -11,9 +11,11 @@ const FilterPanel = ({ filters, onFilterChange }) => {
     };
 
     return (
-        <Card className="mb-4 shadow-sm border-0" style={{ borderRadius: '16px', background: 'linear-gradient(to right, #ffffff, #f8f9fa)' }}>
-            <Card.Body className="p-4">
-                <h5 className="mb-4 fw-bold text-dark">Find Your Perfect Space 🏠</h5>
+        <Card className="mb-5 glass-panel" style={{ borderRadius: '24px' }}>
+            <Card.Body className="p-4 p-md-5">
+                <h4 className="mb-4 fw-bold text-dark d-flex align-items-center">
+                    <span className="me-2 text-gradient-primary">🔍</span> Find Your Perfect Space
+                </h4>
                 <Form>
                     <Row className="g-4">
                         <Col md={6}>
@@ -26,7 +28,7 @@ const FilterPanel = ({ filters, onFilterChange }) => {
                                     onChange={handlePriceChange}
                                     min="0"
                                     step="50"
-                                    className="bg-light border-0 shadow-sm py-2 px-3 rounded-pill"
+                                    className="premium-input"
                                 />
                             </Form.Group>
                         </Col>
@@ -36,7 +38,7 @@ const FilterPanel = ({ filters, onFilterChange }) => {
                                 <Form.Select
                                     value={filters.bedrooms}
                                     onChange={handleBedroomsChange}
-                                    className="bg-light border-0 shadow-sm py-2 px-3 rounded-pill cursor-pointer"
+                                    className="premium-input cursor-pointer"
                                 >
                                     <option value="All">All Sizes</option>
                                     <option value="1">1 Bedroom</option>

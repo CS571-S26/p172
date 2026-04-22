@@ -5,7 +5,9 @@ import ContactForm from './ContactForm';
 const AboutPage = () => {
     return (
         <Container className="py-5">
-            <h1 className="mb-4">About BadgerLease</h1>
+            <h1 className="mb-4 fw-bolder" style={{ fontSize: '3rem' }}>
+                About <span className="text-gradient-primary">BadgerLease</span>
+            </h1>
             <Row className="mb-5">
                 <Col md={8}>
                     <p className="lead">
@@ -19,11 +21,11 @@ const AboutPage = () => {
             </Row>
 
             <Row className="mb-5">
-                <Col md={12}>
-                    <Card className="shadow-sm border-0">
-                        <Card.Body>
-                            <h3 className="mb-3">Contact Us</h3>
-                            <p className="text-muted mb-4">Have questions or feedback? We'd love to hear from you!</p>
+                <Col md={12} lg={10} className="mx-auto">
+                    <Card className="glass-panel" style={{ borderRadius: '24px' }}>
+                        <Card.Body className="p-4 p-md-5">
+                            <h3 className="mb-3 fw-bold text-dark">Get in Touch 👋</h3>
+                            <p className="fs-5 mb-4" style={{ color: '#475569' }}>Have questions or feedback? We'd love to hear from you!</p>
                             <ContactForm />
                         </Card.Body>
                     </Card>

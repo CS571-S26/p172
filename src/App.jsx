@@ -23,7 +23,7 @@ function App() {
 
   return (
     <Router>
-      <div className="bg-light min-vh-100 font-monospace" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <div className="min-vh-100 d-flex flex-column bg-transparent">
         <Navigation savedCount={savedListings.length} />
         <Routes>
           <Route

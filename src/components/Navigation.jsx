@@ -6,10 +6,10 @@ const Navigation = ({ savedCount }) => {
     const location = useLocation();
 
     return (
-        <Navbar bg="white" expand="lg" className="shadow-sm py-3" sticky="top">
+        <Navbar expand="lg" className="glass-nav py-3" sticky="top">
             <Container>
-                <Navbar.Brand as={Link} to="/" className="fw-bolder fs-4">
-                    <span className="text-danger">Badger</span><span className="text-primary">Lease</span>
+                <Navbar.Brand as={Link} to="/" className="fw-bolder fs-4" style={{ letterSpacing: '-0.5px' }}>
+                    <span className="text-gradient-danger">Badger</span><span className="text-gradient-primary">Lease</span>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">

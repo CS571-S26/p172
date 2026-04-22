@@ -47,10 +47,11 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                             </div>
 
                             <h5 className="fw-bold mt-4 mb-3">Description</h5>
-                            <p className="fs-5 text-secondary" style={{ lineHeight: '1.8' }}>
-                                This beautiful property located in {listing.location} offers a comfortable and spacious living environment.
-                                With {listing.bedrooms} bedroom{listing.bedrooms > 1 ? 's' : ''} and excellent amenities like {listing.amenities.join(', ')},
-                                it is perfect for anyone looking to find a great place on the BadgerLease marketplace. Reach out to the owner for more details or to schedule a tour!
+                            <p className="fs-5 text-secondary" style={{ lineHeight: '1.8', whiteSpace: 'pre-wrap' }}>
+                                {listing.description
+                                    ? listing.description
+                                    : `This beautiful property located in ${listing.location} offers a comfortable and spacious living environment. With ${listing.bedrooms} bedroom${listing.bedrooms > 1 ? 's' : ''} and excellent amenities like ${listing.amenities.join(', ')}, it is perfect for anyone looking to find a great place on the BadgerLease marketplace. Reach out to the owner for more details or to schedule a tour!`
+                                }
                             </p>
                         </Col>
                         {/* Price and Action Section */}

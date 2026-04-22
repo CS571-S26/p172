@@ -9,7 +9,8 @@ const CreateListingPage = ({ onAddListing }) => {
         price: '',
         bedrooms: '',
         location: '',
-        amenities: ''
+        amenities: '',
+        description: ''
     });
     const [error, setError] = useState('');
 
@@ -30,7 +31,8 @@ const CreateListingPage = ({ onAddListing }) => {
             price: parseFloat(formData.price),
             bedrooms: parseInt(formData.bedrooms),
             location: formData.location,
-            amenities: formData.amenities.split(',').map(item => item.trim()).filter(item => item !== '')
+            amenities: formData.amenities.split(',').map(item => item.trim()).filter(item => item !== ''),
+            description: formData.description
         };
 
         onAddListing(newListing);
@@ -117,6 +119,20 @@ const CreateListingPage = ({ onAddListing }) => {
                                         onChange={handleChange}
                                         placeholder="e.g. In-unit Laundry, Furnished, Gym"
                                         className="premium-input"
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-5">
+                                    <Form.Label className="fw-semibold">Detailed Description</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={4}
+                                        name="description"
+                                        value={formData.description}
+                                        onChange={handleChange}
+                                        placeholder="Write a charming description about your property..."
+                                        className="premium-input"
+                                        required
                                     />
                                 </Form.Group>
 

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const CreateListingPage = ({ onAddListing }) => {
     const navigate = useNavigate();
+    const { currentUser } = useAuth();
     const [formData, setFormData] = useState({
         title: '',
         price: '',
@@ -14,7 +16,10 @@ const CreateListingPage = ({ onAddListing }) => {
         startDate: '',
         endDate: '',
         contactEmail: '',
-        images: [] // Array of base64 strings or Object URLs
+        images: [], // Array of base64 strings or Object URLs
+        petFriendly: false,
+        smokingAllowed: false,
+        studyFriendly: false,
     });
     const [error, setError] = useState('');
 
@@ -31,7 +36,8 @@ const CreateListingPage = ({ onAddListing }) => {
     };
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value, type, checked } = e.target;
+        setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
     };
 
     const handleSubmit = (e) => {
@@ -52,7 +58,14 @@ const CreateListingPage = ({ onAddListing }) => {
             startDate: formData.startDate,
             endDate: formData.endDate,
             contactEmail: formData.contactEmail,
-            images: formData.images.length > 0 ? formData.images : [`https://picsum.photos/seed/${Date.now()}/800/600`]
+            images: formData.images.length > 0 ? formData.images : [`https://picsum.photos/seed/${Date.now()}/800/600`],
+            roommatePrefs: {
+                petFriendly: formData.petFriendly,
+                smokingAllowed: formData.smokingAllowed,
+                studyFriendly: formData.studyFriendly,
+            },
+            postedByEmail: currentUser?.email || 'guest@badgerlease.local',
+            postedByName: currentUser?.name || 'Guest',
         };
 
         onAddListing(newListing);
@@ -69,9 +82,9 @@ const CreateListingPage = ({ onAddListing }) => {
                 <Col md={10} lg={8}>
                     <Card className="glass-panel" style={{ borderRadius: '24px' }}>
                         <Card.Body className="p-4 p-md-5">
-                            {error && <Alert variant="danger">{error}</Alert>}
+                            {error && <Alert variant="danger" role="alert">{error}</Alert>}
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-4">
+                                <Form.Group className="mb-4" controlId="listingTitle">
                                     <Form.Label className="fw-semibold">Listing Title *</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -86,7 +99,7 @@ const CreateListingPage = ({ onAddListing }) => {
 
                                 <Row>
                                     <Col md={6}>
-                                        <Form.Group className="mb-4">
+                                        <Form.Group className="mb-4" controlId="monthlyRent">
                                             <Form.Label className="fw-semibold">Monthly Rent ($) *</Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -101,7 +114,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col md={6}>
-                                        <Form.Group className="mb-4">
+                                        <Form.Group className="mb-4" controlId="bedrooms">
                                             <Form.Label className="fw-semibold">Bedrooms *</Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -117,7 +130,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                     </Col>
                                 </Row>
 
-                                <Form.Group className="mb-4">
+                                <Form.Group className="mb-4" controlId="location">
                                     <Form.Label className="fw-semibold">Location *</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -132,7 +145,7 @@ const CreateListingPage = ({ onAddListing }) => {
 
                                 <Row>
                                     <Col md={6}>
-                                        <Form.Group className="mb-4">
+                                        <Form.Group className="mb-4" controlId="moveInDate">
                                             <Form.Label className="fw-semibold">Move In Date *</Form.Label>
                                             <Form.Control
                                                 type="date"
@@ -145,7 +158,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                         </Form.Group>
                                     </Col>
                                     <Col md={6}>
-                                        <Form.Group className="mb-4">
+                                        <Form.Group className="mb-4" controlId="moveOutDate">
                                             <Form.Label className="fw-semibold">Move Out Date</Form.Label>
                                             <Form.Control
                                                 type="date"
@@ -158,7 +171,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                     </Col>
                                 </Row>
 
-                                <Form.Group className="mb-4">
+                                <Form.Group className="mb-4" controlId="contactEmail">
                                     <Form.Label className="fw-semibold">Contact Email *</Form.Label>
                                     <Form.Control
                                         type="email"
@@ -171,7 +184,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group className="mb-4">
+                                <Form.Group className="mb-4" controlId="photos">
                                     <Form.Label className="fw-semibold">Upload Photos (Up to 5)</Form.Label>
                                     <Form.Control
                                         type="file"
@@ -183,13 +196,13 @@ const CreateListingPage = ({ onAddListing }) => {
                                     {formData.images.length > 0 && (
                                         <div className="d-flex gap-2 mt-3 overflow-auto pb-2">
                                             {formData.images.map((src, idx) => (
-                                                <img key={idx} src={src} alt="Preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '12px' }} className="shadow-sm border border-secondary" />
+                                                <img key={idx} src={src} alt={`Upload preview ${idx + 1}`} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '12px' }} className="shadow-sm border border-secondary" />
                                             ))}
                                         </div>
                                     )}
                                 </Form.Group>
 
-                                <Form.Group className="mb-4">
+                                <Form.Group className="mb-4" controlId="amenities">
                                     <Form.Label className="fw-semibold">Amenities (Comma separated)</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -201,7 +214,37 @@ const CreateListingPage = ({ onAddListing }) => {
                                     />
                                 </Form.Group>
 
-                                <Form.Group className="mb-5">
+                                <Form.Group className="mb-4" controlId="roommatePrefs">
+                                    <Form.Label className="fw-semibold">Roommate Preferences</Form.Label>
+                                    <div className="d-flex flex-wrap gap-3 mt-1">
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="petFriendly"
+                                            name="petFriendly"
+                                            label="Pet friendly"
+                                            checked={formData.petFriendly}
+                                            onChange={handleChange}
+                                        />
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="smokingAllowed"
+                                            name="smokingAllowed"
+                                            label="Smoking allowed"
+                                            checked={formData.smokingAllowed}
+                                            onChange={handleChange}
+                                        />
+                                        <Form.Check
+                                            type="checkbox"
+                                            id="studyFriendly"
+                                            name="studyFriendly"
+                                            label="Study-friendly / quiet"
+                                            checked={formData.studyFriendly}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                </Form.Group>
+
+                                <Form.Group className="mb-5" controlId="description">
                                     <Form.Label className="fw-semibold">Detailed Description</Form.Label>
                                     <Form.Control
                                         as="textarea"

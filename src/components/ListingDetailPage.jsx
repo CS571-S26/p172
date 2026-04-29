@@ -1,15 +1,25 @@
-import React from 'react';
-import { Container, Row, Col, Card, Badge, Button, Carousel } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Card, Badge, Button, Toast, ToastContainer } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
+import AmenityBadges from './AmenityBadges';
+import ImageCarousel from './ImageCarousel';
+import PricePanel from './PricePanel';
+import ListingChatPanel from './ListingChatPanel';
 
-const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
+const ListingDetailPage = ({ listings, savedListings, onSaveListing, isAuthenticated, onViewed }) => {
     const { id } = useParams();
     const listing = listings.find((item) => item.id.toString() === id);
+    const [showToast, setShowToast] = useState(false);
+
+    useEffect(() => {
+        if (!listing) return;
+        onViewed?.(listing.id);
+    }, [listing, onViewed]);
 
     if (!listing) {
         return (
             <Container className="py-5 text-center">
-                <h2>Listing Not Found</h2>
+                <h1 className="h2">Listing Not Found</h1>
                 <p className="text-muted">The listing you are looking for does not exist.</p>
                 <Link to="/">
                     <Button className="btn-premium px-4 mt-3">Back to Home</Button>
@@ -23,23 +33,17 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
 
     return (
         <Container className="py-5">
+            <ToastContainer position="bottom-end" className="p-3">
+                <Toast bg="dark" show={showToast} autohide delay={1800} onClose={() => setShowToast(false)}>
+                    <Toast.Body className="text-white">Listing link copied!</Toast.Body>
+                </Toast>
+            </ToastContainer>
             <Link to="/" className="text-decoration-none text-muted fw-semibold mb-4 d-inline-block">
                 &larr; Back to Listings
             </Link>
             <Card className="glass-panel border-0 mt-3" style={{ borderRadius: '24px', overflow: 'hidden' }}>
                 <div className="position-relative bg-dark">
-                    <Carousel interval={null}>
-                        {displayImages.map((src, idx) => (
-                            <Carousel.Item key={idx}>
-                                <img
-                                    className="d-block w-100"
-                                    style={{ height: '450px', objectFit: 'cover' }}
-                                    src={src}
-                                    alt={`Slide ${idx}`}
-                                />
-                            </Carousel.Item>
-                        ))}
-                    </Carousel>
+                    <ImageCarousel images={displayImages} title={listing.title} />
                     <div style={{ position: 'absolute', bottom: '25px', right: '25px', zIndex: 10 }}>
                         <Badge className="premium-badge fs-5 px-4 py-2 shadow">{listing.bedrooms} Bedroom{listing.bedrooms > 1 ? 's' : ''}</Badge>
                     </div>
@@ -55,11 +59,7 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
 
                             <h5 className="fw-bold mt-5 mb-3">Amenities</h5>
                             <div className="d-flex flex-wrap mb-4">
-                                {listing.amenities.map((amenity, index) => (
-                                    <Badge bg="light" text="dark" className="me-2 mb-2 p-3 border border-2 rounded-pill fw-medium fs-6 text-secondary" key={index}>
-                                        {amenity}
-                                    </Badge>
-                                ))}
+                                <AmenityBadges amenities={listing.amenities} />
                             </div>
 
                             <h5 className="fw-bold mt-4 mb-3">Description</h5>
@@ -69,34 +69,25 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing }) => {
                                     : `This beautiful property located in ${listing.location} offers a comfortable and spacious living environment. With ${listing.bedrooms} bedroom${listing.bedrooms > 1 ? 's' : ''} and excellent amenities like ${listing.amenities.join(', ')}, it is perfect for anyone looking to find a great place on the BadgerLease marketplace. Reach out to the owner for more details or to schedule a tour!`
                                 }
                             </p>
+                            <Button
+                                variant="outline-dark"
+                                className="rounded-pill fw-semibold mt-2"
+                                onClick={async () => {
+                                    await navigator.clipboard.writeText(window.location.href);
+                                    setShowToast(true);
+                                }}
+                            >
+                                Share Listing
+                            </Button>
+                            <ListingChatPanel listing={listing} />
                         </Col>
-                        {/* Price and Action Section */}
                         <Col md={4} className="mt-5 mt-md-0 d-flex flex-column">
-                            <Card className="border-0 shadow-sm rounded-4 bg-light p-4 h-100">
-                                <h5 className="text-secondary fw-semibold">Monthly Rent</h5>
-                                <h2 className="mb-4 fw-bolder" style={{ color: '#6366f1', fontSize: '3rem' }}>
-                                    ${listing.price}
-                                    <span className="text-muted fw-normal" style={{ fontSize: '1.2rem' }}>/mo</span>
-                                </h2>
-
-                                <div className="mt-auto d-flex flex-column gap-3">
-                                    <Button
-                                        variant={isSaved ? "outline-secondary" : "primary"}
-                                        className={`w-100 py-3 fs-5 ${isSaved ? "rounded-pill fw-bold" : "btn-premium"}`}
-                                        onClick={() => onSaveListing(listing)}
-                                        disabled={isSaved}
-                                    >
-                                        {isSaved ? "✓ Saved to Favorites" : "Save to Favorites ❤️"}
-                                    </Button>
-                                    <Button
-                                        variant="dark"
-                                        className="w-100 rounded-pill py-3 fw-bold fs-5 shadow-sm"
-                                        onClick={() => window.location.href = `mailto:${listing.contactEmail}?subject=Inquiry about ${listing.title}`}
-                                    >
-                                        Contact Owner ✉️
-                                    </Button>
-                                </div>
-                            </Card>
+                            <PricePanel
+                                listing={listing}
+                                isSaved={isSaved}
+                                onSaveListing={onSaveListing}
+                                isAuthenticated={isAuthenticated}
+                            />
                         </Col>
                     </Row>
                 </Card.Body>

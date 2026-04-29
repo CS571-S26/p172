@@ -7,9 +7,9 @@ const SavedPage = ({ savedListings, onRemoveListing }) => {
         <div className="pt-5 pb-5">
             <Container>
                 <div className="mb-5 text-center hero-section py-5">
-                    <h2 className="fw-bold mb-3" style={{ fontSize: '2.5rem' }}>
+                    <h1 className="fw-bold mb-3" style={{ fontSize: '2.5rem' }}>
                         <span className="text-gradient-danger">My Saved</span> Favorites ❤️
-                    </h2>
+                    </h1>
                     <p className="fs-5" style={{ color: '#475569', fontWeight: 500 }}>Keep track of your top apartment selections.</p>
                 </div>
 
@@ -29,6 +29,11 @@ const SavedPage = ({ savedListings, onRemoveListing }) => {
                             <Col key={listing.id}>
                                 <Card className="h-100 premium-card">
                                     <div className="premium-image-container" style={{ height: '180px' }}>
+                                        <img
+                                            src={listing.images?.[0] || 'https://picsum.photos/seed/saved/800/600'}
+                                            alt={`${listing.title} preview`}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
                                         <div style={{ position: 'absolute', bottom: '12px', right: '12px' }}>
                                             <Badge className="premium-badge shadow-sm">{listing.bedrooms} Bed</Badge>
                                         </div>

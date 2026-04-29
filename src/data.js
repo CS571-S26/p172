@@ -10,7 +10,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1502672260266-1c1de2d93688?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-05-15",
         endDate: "2026-08-15",
-        contactEmail: "roommate1@wisc.edu"
+        contactEmail: "roommate1@wisc.edu",
+        roommatePrefs: { petFriendly: true, smokingAllowed: false, studyFriendly: true }
     },
     {
         id: 2,
@@ -23,7 +24,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1502672260266-1c1de2d93688?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-09-01",
         endDate: "2027-05-31",
-        contactEmail: "sportsfan@wisc.edu"
+        contactEmail: "sportsfan@wisc.edu",
+        roommatePrefs: { petFriendly: false, smokingAllowed: true, studyFriendly: false }
     },
     {
         id: 3,
@@ -36,7 +38,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-08-15",
         endDate: "2027-08-14",
-        contactEmail: "capitolliv@gmail.com"
+        contactEmail: "capitolliv@gmail.com",
+        roommatePrefs: { petFriendly: true, smokingAllowed: false, studyFriendly: true }
     },
     {
         id: 4,
@@ -49,7 +52,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-06-01",
         endDate: "2026-12-31",
-        contactEmail: "langdonstudio@wisc.edu"
+        contactEmail: "langdonstudio@wisc.edu",
+        roommatePrefs: { petFriendly: false, smokingAllowed: false, studyFriendly: true }
     },
     {
         id: 5,
@@ -62,7 +66,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"],
         startDate: "2027-01-01",
         endDate: "2027-05-30",
-        contactEmail: "monroehouse@gmail.com"
+        contactEmail: "monroehouse@gmail.com",
+        roommatePrefs: { petFriendly: true, smokingAllowed: false, studyFriendly: false }
     },
     {
         id: 6,
@@ -75,7 +80,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1598928506311-c55dd5802a43?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-05-15",
         endDate: "2026-08-15",
-        contactEmail: "regent.roommate@wisc.edu"
+        contactEmail: "regent.roommate@wisc.edu",
+        roommatePrefs: { petFriendly: false, smokingAllowed: false, studyFriendly: true }
     },
     {
         id: 7,
@@ -88,7 +94,8 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-08-01",
         endDate: "2027-07-31",
-        contactEmail: "vilas4bed@gmail.com"
+        contactEmail: "vilas4bed@gmail.com",
+        roommatePrefs: { petFriendly: true, smokingAllowed: true, studyFriendly: false }
     },
     {
         id: 8,
@@ -101,6 +108,7 @@ export const DUMMY_LISTINGS = [
         images: ["https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80"],
         startDate: "2026-06-01",
         endDate: "2026-08-15",
-        contactEmail: "univ.apts@gmail.com"
+        contactEmail: "univ.apts@gmail.com",
+        roommatePrefs: { petFriendly: true, smokingAllowed: false, studyFriendly: true }
     }
 ];

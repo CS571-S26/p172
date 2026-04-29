@@ -1,14 +1,38 @@
 import React, { useState, useMemo } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import ListingCard from './ListingCard';
 import FilterPanel from './FilterPanel';
+import HeroSection from './HeroSection';
+import EmptyState from './EmptyState';
+import ListingGrid from './ListingGrid';
+import CompareBar from './CompareBar';
+import CompareModal from './CompareModal';
+import { calculateMatchScore } from '../utils/matchScore';
 
-const HomePage = ({ listings, savedListings, onSaveListing }) => {
-    const [filters, setFilters] = useState({ maxPrice: '', bedrooms: 'All' });
+const HomePage = ({ listings, savedListings, onSaveListing, isAuthenticated, recentListings }) => {
+    const initialFilters = {
+        query: '',
+        maxPrice: '',
+        bedrooms: 'All',
+        sortBy: 'recommended',
+        petFriendlyOnly: false,
+        noSmokingOnly: false,
+        studyFriendlyOnly: false,
+    };
+    const [filters, setFilters] = useState(initialFilters);
+    const [comparedIds, setComparedIds] = useState([]);
+    const [showCompare, setShowCompare] = useState(false);
 
     // Filter listings based on current state
     const filteredListings = useMemo(() => {
-        return listings.filter((listing) => {
+        const matchedListings = listings.filter((listing) => {
+            const query = filters.query.trim().toLowerCase();
+            if (query) {
+                const haystack = `${listing.title} ${listing.location} ${listing.amenities.join(' ')}`.toLowerCase();
+                if (!haystack.includes(query)) {
+                    return false;
+                }
+            }
+
             // Check max price
             if (filters.maxPrice && listing.price > parseFloat(filters.maxPrice)) {
                 return false;
@@ -23,50 +47,111 @@ const HomePage = ({ listings, savedListings, onSaveListing }) => {
                 }
             }
 
+            if (filters.petFriendlyOnly && !listing.roommatePrefs?.petFriendly) return false;
+            if (filters.noSmokingOnly && listing.roommatePrefs?.smokingAllowed) return false;
+            if (filters.studyFriendlyOnly && !listing.roommatePrefs?.studyFriendly) return false;
+
             return true;
         });
+
+        if (filters.sortBy === 'price_low_high') {
+            return [...matchedListings].sort((a, b) => a.price - b.price);
+        }
+        if (filters.sortBy === 'price_high_low') {
+            return [...matchedListings].sort((a, b) => b.price - a.price);
+        }
+        if (filters.sortBy === 'bedrooms_high_low') {
+            return [...matchedListings].sort((a, b) => b.bedrooms - a.bedrooms);
+        }
+        if (filters.sortBy === 'recommended') {
+            return [...matchedListings].sort(
+                (a, b) => calculateMatchScore(b, filters) - calculateMatchScore(a, filters)
+            );
+        }
+        return matchedListings;
     }, [filters, listings]);
+
+    const comparedListings = comparedIds
+        .map((id) => listings.find((listing) => listing.id === id))
+        .filter(Boolean);
+
+    const handleToggleCompare = (listingId) => {
+        setComparedIds((prev) => {
+            if (prev.includes(listingId)) {
+                return prev.filter((id) => id !== listingId);
+            }
+            if (prev.length >= 3) {
+                return prev;
+            }
+            return [...prev, listingId];
+        });
+    };
 
     return (
         <div className="pt-4 pb-5">
             <Container>
-                <div className="hero-section mb-5">
-                    <h1 className="fw-bolder mb-3" style={{ fontSize: '3.5rem' }}>
-                        <span className="text-gradient-danger">Badger</span><span className="text-gradient-primary">Lease</span>
-                    </h1>
-                    <p className="fs-5 mb-0" style={{ color: '#475569', fontWeight: 500 }}>UW-Madison's premier student sublease marketplace</p>
-                </div>
+                <HeroSection
+                    title={
+                        <>
+                            <span className="text-gradient-danger">Badger</span>
+                            <span className="text-gradient-primary">Lease</span>
+                        </>
+                    }
+                    subtitle="Find a sublease fast with better filters, photo previews, and saved favorites."
+                    listingCount={filteredListings.length}
+                    isAuthenticated={isAuthenticated}
+                />
 
-                <FilterPanel filters={filters} onFilterChange={setFilters} />
+                <FilterPanel filters={filters} onFilterChange={setFilters} onReset={() => setFilters(initialFilters)} />
+                <CompareBar
+                    selectedCount={comparedIds.length}
+                    onOpen={() => setShowCompare(true)}
+                    onClear={() => setComparedIds([])}
+                />
+                <CompareModal
+                    show={showCompare}
+                    onHide={() => setShowCompare(false)}
+                    listings={comparedListings}
+                />
+
+                {recentListings.length > 0 && (
+                    <section className="mb-5">
+                        <h2 className="h4 fw-bold mb-3">Recently Viewed</h2>
+                        <ListingGrid
+                            listings={recentListings}
+                            savedListings={savedListings}
+                            onSaveListing={onSaveListing}
+                            isAuthenticated={isAuthenticated}
+                            comparedIds={comparedIds}
+                            onToggleCompare={handleToggleCompare}
+                            filters={filters}
+                        />
+                    </section>
+                )}
 
                 <Row className="mb-4 align-items-center">
                     <Col>
-                        <h4 className="fw-bold mb-0 text-dark">
+                        <h2 className="h4 fw-bold mb-0 text-dark">
                             Available Listings <span className="text-muted fs-5">({filteredListings.length})</span>
-                        </h4>
+                        </h2>
                     </Col>
                 </Row>
 
                 {filteredListings.length === 0 ? (
-                    <div className="text-center py-5 bg-white rounded-4 shadow-sm">
-                        <h4 className="text-muted mb-2">No listings found 😢</h4>
-                        <p className="text-secondary">Try adjusting your filters to see more results.</p>
-                    </div>
+                    <EmptyState
+                        title="No listings found"
+                        description="Try adjusting your filters to see more results."
+                    />
                 ) : (
-                    <Row xs={1} md={2} lg={3} className="g-4">
-                        {filteredListings.map((listing) => {
-                            const isSaved = savedListings.some(item => item.id === listing.id);
-                            return (
-                                <Col key={listing.id}>
-                                    <ListingCard
-                                        listing={listing}
-                                        onSave={onSaveListing}
-                                        isSaved={isSaved}
-                                    />
-                                </Col>
-                            );
-                        })}
-                    </Row>
+                    <ListingGrid
+                        listings={filteredListings}
+                        savedListings={savedListings}
+                        onSaveListing={onSaveListing}
+                        isAuthenticated={isAuthenticated}
+                        comparedIds={comparedIds}
+                        onToggleCompare={handleToggleCompare}
+                        filters={filters}
+                    />
                 )}
             </Container>
         </div>

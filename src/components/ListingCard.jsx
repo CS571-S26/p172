@@ -13,7 +13,9 @@ const ListingCard = ({
   onToggleCompare,
   filters,
 }) => {
-  const displayImage = listing.images && listing.images.length > 0 ? listing.images[0] : 'https://picsum.photos/800/600';
+  const displayImage = listing.images && listing.images.length > 0
+    ? listing.images[0]
+    : 'https://images.pexels.com/photos/1571468/pexels-photo-1571468.jpeg?auto=compress&cs=tinysrgb&w=1200';
   const matchScore = calculateMatchScore(listing, filters || {});
 
   return (
@@ -40,10 +42,10 @@ const ListingCard = ({
           </Link>
           <h5 className="mb-0 fw-bold ms-3" style={{ color: '#6366f1' }}>${listing.price}<span className="text-muted fw-normal" style={{ fontSize: '0.8rem' }}>/mo</span></h5>
         </div>
-        <Card.Text className="text-secondary mb-3">
+        <div className="text-secondary mb-3">
           <div className="mb-1">📍 {listing.location}</div>
           <div className="fw-semibold" style={{ fontSize: '0.9rem' }}>📅 {listing.startDate ? new Date(listing.startDate).toLocaleDateString() : 'TBD'} - {listing.endDate ? new Date(listing.endDate).toLocaleDateString() : 'TBD'}</div>
-        </Card.Text>
+        </div>
         <div className="mb-4">
           <AmenityBadges amenities={listing.amenities} />
         </div>

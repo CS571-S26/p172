@@ -35,6 +35,15 @@ function App() {
       return {};
     }
   });
+  const [inquiries, setInquiries] = useState(() => {
+    const raw = localStorage.getItem('badgerlease_inquiries');
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  });
 
   const favoritesStorageKey = useMemo(() => {
     if (!currentUser) return null;
@@ -90,57 +99,112 @@ function App() {
   const myListings = currentUser
     ? listings.filter((listing) => listing.postedByEmail === currentUser.email)
     : [];
+  const myListingIds = new Set(myListings.map((listing) => listing.id));
+  const inboxInquiries = inquiries.filter((inquiry) => {
+    if (!currentUser) return false;
+    const ownsListingById = myListingIds.has(inquiry.listingId);
+    const ownsListingByEmail = inquiry.ownerEmail === currentUser.email;
+    return ownsListingById || ownsListingByEmail;
+  });
+
+  const handleCreateInquiry = useCallback((payload) => {
+    setInquiries((prev) => {
+      const next = [
+        ...prev,
+        {
+          id: Date.now(),
+          ...payload,
+          status: 'new',
+          createdAt: new Date().toISOString(),
+          replies: [],
+        },
+      ];
+      localStorage.setItem('badgerlease_inquiries', JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
+  const handleReplyInquiry = useCallback((inquiryId, message) => {
+    setInquiries((prev) => {
+      const next = prev.map((inquiry) => {
+        if (inquiry.id !== inquiryId) return inquiry;
+        return {
+          ...inquiry,
+          status: 'responded',
+          replies: [
+            ...(inquiry.replies || []),
+            {
+              id: Date.now(),
+              fromName: currentUser?.name || 'Owner',
+              fromEmail: currentUser?.email || '',
+              message,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        };
+      });
+      localStorage.setItem('badgerlease_inquiries', JSON.stringify(next));
+      return next;
+    });
+  }, [currentUser]);
 
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <div className="app-shell min-vh-100 d-flex flex-column bg-transparent">
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         <Navigation savedCount={savedListings.length} listings={listings} />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <HomePage
-                listings={listings}
-                savedListings={savedListings}
-                onSaveListing={handleSaveListing}
-                isAuthenticated={isAuthenticated}
-                recentListings={recentListings}
-              />
-            }
-          />
-          <Route
-            path="/mypage"
-            element={
-              <ProtectedRoute>
-                <MyPage
-                  myListings={myListings}
+        <main id="main-content" tabIndex="-1">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  listings={listings}
                   savedListings={savedListings}
-                  onRemoveListing={handleRemoveListing}
+                  onSaveListing={handleSaveListing}
+                  isAuthenticated={isAuthenticated}
+                  recentListings={recentListings}
                 />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/saved" element={<Navigate to="/mypage" replace />} />
-          <Route
-            path="/create"
-            element={<CreateListingPage onAddListing={handleAddListing} />}
-          />
-          <Route
-            path="/listings/:id"
-            element={
-              <ListingDetailPage
-                listings={listings}
-                savedListings={savedListings}
-                onSaveListing={handleSaveListing}
-                isAuthenticated={isAuthenticated}
-                onViewed={handleViewedListing}
-              />
-            }
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+              }
+            />
+            <Route
+              path="/mypage"
+              element={
+                <ProtectedRoute>
+                  <MyPage
+                    myListings={myListings}
+                    savedListings={savedListings}
+                    onRemoveListing={handleRemoveListing}
+                    inboxInquiries={inboxInquiries}
+                    onReplyInquiry={handleReplyInquiry}
+                  />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/saved" element={<Navigate to="/mypage" replace />} />
+            <Route
+              path="/create"
+              element={<CreateListingPage onAddListing={handleAddListing} />}
+            />
+            <Route
+              path="/listings/:id"
+              element={
+                <ListingDetailPage
+                  listings={listings}
+                  savedListings={savedListings}
+                  onSaveListing={handleSaveListing}
+                  isAuthenticated={isAuthenticated}
+                  onViewed={handleViewedListing}
+                  inquiries={inquiries}
+                  onCreateInquiry={handleCreateInquiry}
+                />
+              }
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
         <Footer />
       </div>
     </Router>

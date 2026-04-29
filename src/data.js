@@ -7,7 +7,10 @@ export const DUMMY_LISTINGS = [
         location: "Downtown Madison",
         amenities: ["In-unit Laundry", "Furnished", "Gym"],
         description: "Looking for a roommate! The apartment is fully furnished and incredibly close to State Street dining options and campus. You'll have your own bathroom and access to the building's gym.",
-        images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1502672260266-1c1de2d93688?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/1457842/pexels-photo-1457842.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-05-15",
         endDate: "2026-08-15",
         contactEmail: "roommate1@wisc.edu",
@@ -21,7 +24,11 @@ export const DUMMY_LISTINGS = [
         location: "Campus Area",
         amenities: ["Parking", "A/C"],
         description: "Fantastic spot right next to Camp Randall for incredible game day experiences! Looking to sublet one bedroom in a 4-bedroom house. Great roommates, quiet block.",
-        images: ["https://images.unsplash.com/photo-1502672260266-1c1de2d93688?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/271624/pexels-photo-271624.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/1648776/pexels-photo-1648776.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-09-01",
         endDate: "2027-05-31",
         contactEmail: "sportsfan@wisc.edu",
@@ -35,7 +42,11 @@ export const DUMMY_LISTINGS = [
         location: "Capitol Square",
         amenities: ["Pool", "Gym", "Doorman", "Pet Friendly"],
         description: "Experience premium living right on Capitol Square. This beautiful 1 bedroom includes all building amenities such as a rooftop pool and full fitness center. Perfect for a senior or grad student.",
-        images: ["https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/6585763/pexels-photo-6585763.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-08-15",
         endDate: "2027-08-14",
         contactEmail: "capitolliv@gmail.com",
@@ -49,7 +60,11 @@ export const DUMMY_LISTINGS = [
         location: "Langdon/State Street",
         amenities: ["Furnished", "Utilities Included"],
         description: "A very cozy studio located steps away from Memorial Union and classes on Langdon. Furniture and utilities are fully included in the rent price for an easy move-in.",
-        images: ["https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/6585616/pexels-photo-6585616.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/5997991/pexels-photo-5997991.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/7031747/pexels-photo-7031747.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-06-01",
         endDate: "2026-12-31",
         contactEmail: "langdonstudio@wisc.edu",
@@ -63,7 +78,11 @@ export const DUMMY_LISTINGS = [
         location: "Monroe Street",
         amenities: ["Backyard", "Garage", "Washer/Dryer"],
         description: "Massive 3 bedroom house available for the spring semester! Features a beautiful private backyard, two-car garage, and recently updated appliances. Close to Trader Joe's.",
-        images: ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/7031406/pexels-photo-7031406.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/7031414/pexels-photo-7031414.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/5998120/pexels-photo-5998120.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2027-01-01",
         endDate: "2027-05-30",
         contactEmail: "monroehouse@gmail.com",
@@ -77,7 +96,11 @@ export const DUMMY_LISTINGS = [
         location: "Regent Neighborhood",
         amenities: ["Balcony", "A/C", "Dishwasher"],
         description: "Very budget-friendly shared room in the Regent neighborhood. The apartment has a nice balcony with a great view and a modern kitchen with a dishwasher.",
-        images: ["https://images.unsplash.com/photo-1598928506311-c55dd5802a43?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/8134848/pexels-photo-8134848.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/7031618/pexels-photo-7031618.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/7031408/pexels-photo-7031408.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-05-15",
         endDate: "2026-08-15",
         contactEmail: "regent.roommate@wisc.edu",
@@ -91,7 +114,11 @@ export const DUMMY_LISTINGS = [
         location: "Vilas Area",
         amenities: ["In-unit Laundry", "Basement", "Parking"],
         description: "Brand new modern townhouse perfect for a group of 4. Includes a large finished basement for entertainment, multiple parking spots, and beautiful finishes throughout.",
-        images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/7535030/pexels-photo-7535030.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/7535027/pexels-photo-7535027.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/5998138/pexels-photo-5998138.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-08-01",
         endDate: "2027-07-31",
         contactEmail: "vilas4bed@gmail.com",
@@ -105,7 +132,11 @@ export const DUMMY_LISTINGS = [
         location: "University Ave",
         amenities: ["Gym", "Secure Entry", "Furnished"],
         description: "Incredible natural light in this 1 bedroom right on University Ave. Highly secure building with electronic locks and a modern fitness center on the first floor.",
-        images: ["https://images.unsplash.com/photo-1502672023488-70e25813eb80?auto=format&fit=crop&w=800&q=80"],
+        images: [
+            "https://images.pexels.com/photos/439227/pexels-photo-439227.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
         startDate: "2026-06-01",
         endDate: "2026-08-15",
         contactEmail: "univ.apts@gmail.com",

@@ -14,11 +14,17 @@ const AuthForm = ({
   secondaryTo,
   showNameField = false,
 }) => {
+  const errorId = 'auth-form-error';
+
   return (
     <Card className="glass-panel border-0" style={{ borderRadius: '24px' }}>
       <Card.Body className="p-4 p-md-5">
         <h1 className="fw-bold mb-4 text-center">{title}</h1>
-        {error && <Alert variant="danger">{error}</Alert>}
+        {error && (
+          <Alert id={errorId} variant="danger" role="alert" aria-live="polite">
+            {error}
+          </Alert>
+        )}
         <Form onSubmit={onSubmit}>
           {showNameField && (
             <Form.Group className="mb-3" controlId="nameField">
@@ -30,6 +36,7 @@ const AuthForm = ({
                 onChange={onChange}
                 required
                 className="premium-input"
+                aria-describedby={error ? errorId : undefined}
               />
             </Form.Group>
           )}
@@ -42,6 +49,7 @@ const AuthForm = ({
               onChange={onChange}
               required
               className="premium-input"
+              aria-describedby={error ? errorId : undefined}
             />
           </Form.Group>
           <Form.Group className="mb-4" controlId="passwordField">
@@ -54,6 +62,7 @@ const AuthForm = ({
               required
               minLength={6}
               className="premium-input"
+              aria-describedby={error ? errorId : undefined}
             />
           </Form.Group>
 

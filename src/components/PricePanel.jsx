@@ -30,18 +30,9 @@ const PricePanel = ({ listing, isSaved, onSaveListing, isAuthenticated }) => {
             </Button>
           </Link>
         )}
-        <a
-          href={`mailto:${listing.contactEmail}?subject=${encodeURIComponent(`Inquiry about ${listing.title}`)}`}
-          className="text-decoration-none"
-        >
-          <Button
-            as="span"
-            variant="dark"
-            className="w-100 rounded-pill py-3 fw-bold fs-5 shadow-sm"
-          >
-            Email Owner
-          </Button>
-        </a>
+        <Button variant="dark" className="w-100 rounded-pill py-3 fw-bold fs-5 shadow-sm" disabled>
+          Contact via In-app Messaging
+        </Button>
       </div>
     </Card>
   );

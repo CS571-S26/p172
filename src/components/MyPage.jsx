@@ -1,8 +1,10 @@
-import React from 'react';
-import { Badge, Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Badge, Button, Card, Col, Container, Form, Row, Tab, Tabs } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const MyPage = ({ myListings, savedListings, onRemoveListing }) => {
+const MyPage = ({ myListings, savedListings, onRemoveListing, inboxInquiries, onReplyInquiry }) => {
+  const [replyMap, setReplyMap] = useState({});
+
   return (
     <Container className="py-5">
       <div className="hero-section py-4 mb-4">
@@ -26,7 +28,7 @@ const MyPage = ({ myListings, savedListings, onRemoveListing }) => {
                   <Card className="premium-card h-100">
                     <div className="premium-image-container" style={{ height: '180px' }}>
                       <img
-                        src={listing.images?.[0] || 'https://picsum.photos/seed/mypost/800/600'}
+                        src={listing.images?.[0] || 'https://images.pexels.com/photos/3935350/pexels-photo-3935350.jpeg?auto=compress&cs=tinysrgb&w=1200'}
                         alt={`${listing.title} preview`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -60,7 +62,7 @@ const MyPage = ({ myListings, savedListings, onRemoveListing }) => {
                   <Card className="premium-card h-100">
                     <div className="premium-image-container position-relative" style={{ height: '180px' }}>
                       <img
-                        src={listing.images?.[0] || 'https://picsum.photos/seed/saved/800/600'}
+                        src={listing.images?.[0] || 'https://images.pexels.com/photos/1571471/pexels-photo-1571471.jpeg?auto=compress&cs=tinysrgb&w=1200'}
                         alt={`${listing.title} saved preview`}
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
@@ -90,6 +92,67 @@ const MyPage = ({ myListings, savedListings, onRemoveListing }) => {
                 </Col>
               ))}
             </Row>
+          )}
+        </Tab>
+        <Tab eventKey="inbox" title={`Inbox (${inboxInquiries.length})`}>
+          {inboxInquiries.length === 0 ? (
+            <div className="glass-panel rounded-4 p-4 text-center">
+              <p className="mb-0 text-secondary">No inquiries yet from viewers.</p>
+            </div>
+          ) : (
+            <div className="d-flex flex-column gap-3">
+              {inboxInquiries.map((inquiry) => (
+                <Card key={inquiry.id} className="glass-panel border-0 rounded-4">
+                  <Card.Body>
+                    <div className="d-flex justify-content-between flex-wrap gap-2">
+                      <div>
+                        <h2 className="h5 fw-bold mb-1">{inquiry.listingTitle}</h2>
+                        <p className="mb-1 text-secondary">
+                          From: {inquiry.fromName} ({inquiry.fromEmail})
+                        </p>
+                        <p className="mb-2">
+                          <strong>Message:</strong> {inquiry.message}
+                        </p>
+                        <small className="text-secondary d-block">
+                          Move-in: {inquiry.moveInDate || 'Flexible'} / Budget: {inquiry.budget || 'Not specified'} / Preferred: {inquiry.contactMethod}
+                        </small>
+                        <small className="text-secondary d-block">Status: {inquiry.status}</small>
+                      </div>
+                    </div>
+                    {inquiry.replies?.length > 0 && (
+                      <div className="mt-3 border-top pt-2">
+                        {inquiry.replies.map((reply) => (
+                          <div key={reply.id} className="mb-2">
+                            <small className="fw-semibold">{reply.fromName}</small>
+                            <p className="mb-0">{reply.message}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <Form
+                      className="mt-3"
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        const text = replyMap[inquiry.id]?.trim();
+                        if (!text) return;
+                        onReplyInquiry(inquiry.id, text);
+                        setReplyMap((prev) => ({ ...prev, [inquiry.id]: '' }));
+                      }}
+                    >
+                      <Form.Control
+                        className="premium-input"
+                        placeholder="Reply to this inquiry..."
+                        value={replyMap[inquiry.id] || ''}
+                        onChange={(e) => setReplyMap((prev) => ({ ...prev, [inquiry.id]: e.target.value }))}
+                      />
+                      <Button type="submit" className="btn-premium mt-2 px-4">
+                        Send Reply
+                      </Button>
+                    </Form>
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
           )}
         </Tab>
       </Tabs>

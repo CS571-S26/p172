@@ -22,6 +22,7 @@ const CreateListingPage = ({ onAddListing }) => {
         studyFriendly: false,
     });
     const [error, setError] = useState('');
+    const errorId = 'create-listing-error';
 
     const handleImageUpload = (e) => {
         const files = Array.from(e.target.files);
@@ -58,7 +59,9 @@ const CreateListingPage = ({ onAddListing }) => {
             startDate: formData.startDate,
             endDate: formData.endDate,
             contactEmail: formData.contactEmail,
-            images: formData.images.length > 0 ? formData.images : [`https://picsum.photos/seed/${Date.now()}/800/600`],
+            images: formData.images.length > 0
+                ? formData.images
+                : ['https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&w=1200'],
             roommatePrefs: {
                 petFriendly: formData.petFriendly,
                 smokingAllowed: formData.smokingAllowed,
@@ -82,7 +85,7 @@ const CreateListingPage = ({ onAddListing }) => {
                 <Col md={10} lg={8}>
                     <Card className="glass-panel" style={{ borderRadius: '24px' }}>
                         <Card.Body className="p-4 p-md-5">
-                            {error && <Alert variant="danger" role="alert">{error}</Alert>}
+                            {error && <Alert id={errorId} variant="danger" role="alert" aria-live="polite">{error}</Alert>}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-4" controlId="listingTitle">
                                     <Form.Label className="fw-semibold">Listing Title *</Form.Label>
@@ -94,6 +97,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                         placeholder="e.g. Spacious Room near State St"
                                         className="premium-input"
                                         required
+                                        aria-describedby={error ? errorId : undefined}
                                     />
                                 </Form.Group>
 
@@ -110,6 +114,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                                 className="premium-input"
                                                 min="0"
                                                 required
+                                                aria-describedby={error ? errorId : undefined}
                                             />
                                         </Form.Group>
                                     </Col>
@@ -125,6 +130,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                                 className="premium-input"
                                                 min="1"
                                                 required
+                                                aria-describedby={error ? errorId : undefined}
                                             />
                                         </Form.Group>
                                     </Col>
@@ -140,6 +146,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                         placeholder="e.g. Downtown Madison"
                                         className="premium-input"
                                         required
+                                        aria-describedby={error ? errorId : undefined}
                                     />
                                 </Form.Group>
 
@@ -154,6 +161,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                                 onChange={handleChange}
                                                 className="premium-input"
                                                 required
+                                                aria-describedby={error ? errorId : undefined}
                                             />
                                         </Form.Group>
                                     </Col>
@@ -181,6 +189,7 @@ const CreateListingPage = ({ onAddListing }) => {
                                         placeholder="owner@wisc.edu"
                                         className="premium-input"
                                         required
+                                        aria-describedby={error ? errorId : undefined}
                                     />
                                 </Form.Group>
 

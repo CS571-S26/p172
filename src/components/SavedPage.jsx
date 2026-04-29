@@ -30,7 +30,7 @@ const SavedPage = ({ savedListings, onRemoveListing }) => {
                                 <Card className="h-100 premium-card">
                                     <div className="premium-image-container" style={{ height: '180px' }}>
                                         <img
-                                            src={listing.images?.[0] || 'https://picsum.photos/seed/saved/800/600'}
+                                            src={listing.images?.[0] || 'https://images.pexels.com/photos/1571471/pexels-photo-1571471.jpeg?auto=compress&cs=tinysrgb&w=1200'}
                                             alt={`${listing.title} preview`}
                                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                         />

@@ -6,7 +6,15 @@ import ImageCarousel from './ImageCarousel';
 import PricePanel from './PricePanel';
 import ListingChatPanel from './ListingChatPanel';
 
-const ListingDetailPage = ({ listings, savedListings, onSaveListing, isAuthenticated, onViewed }) => {
+const ListingDetailPage = ({
+    listings,
+    savedListings,
+    onSaveListing,
+    isAuthenticated,
+    onViewed,
+    inquiries,
+    onCreateInquiry,
+}) => {
     const { id } = useParams();
     const listing = listings.find((item) => item.id.toString() === id);
     const [showToast, setShowToast] = useState(false);
@@ -29,7 +37,9 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing, isAuthentic
     }
 
     const isSaved = savedListings.some((item) => item.id === listing.id);
-    const displayImages = listing.images && listing.images.length > 0 ? listing.images : ['https://picsum.photos/1200/800'];
+    const displayImages = listing.images && listing.images.length > 0
+        ? listing.images
+        : ['https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1400'];
 
     return (
         <Container className="py-5">
@@ -79,7 +89,11 @@ const ListingDetailPage = ({ listings, savedListings, onSaveListing, isAuthentic
                             >
                                 Share Listing
                             </Button>
-                            <ListingChatPanel listing={listing} />
+                            <ListingChatPanel
+                                listing={listing}
+                                inquiries={inquiries}
+                                onCreateInquiry={onCreateInquiry}
+                            />
                         </Col>
                         <Col md={4} className="mt-5 mt-md-0 d-flex flex-column">
                             <PricePanel

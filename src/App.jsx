@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from './components/Navigation';
@@ -14,10 +14,30 @@ import MyPage from './components/MyPage';
 import { useAuth } from './context/AuthContext';
 import './App.css';
 
+const LISTINGS_STORAGE_KEY = 'badgerlease_listings';
+const LISTINGS_SCHEMA_VERSION_KEY = 'badgerlease_listings_schema_version';
+const LISTINGS_SCHEMA_VERSION = '2026-04-29-v2';
+
 function App() {
   const { currentUser, isAuthenticated } = useAuth();
-  const [listings, setListings] = useState(DUMMY_LISTINGS);
-  const [recentViewedIds, setRecentViewedIds] = useState(() => {
+  const [listings, setListings] = useState(() => {
+    const schemaVersion = localStorage.getItem(LISTINGS_SCHEMA_VERSION_KEY);
+    if (schemaVersion !== LISTINGS_SCHEMA_VERSION) {
+      localStorage.setItem(LISTINGS_SCHEMA_VERSION_KEY, LISTINGS_SCHEMA_VERSION);
+      localStorage.setItem(LISTINGS_STORAGE_KEY, JSON.stringify(DUMMY_LISTINGS));
+      return DUMMY_LISTINGS;
+    }
+
+    const raw = localStorage.getItem(LISTINGS_STORAGE_KEY);
+    if (!raw) return DUMMY_LISTINGS;
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : DUMMY_LISTINGS;
+    } catch {
+      return DUMMY_LISTINGS;
+    }
+  });
+  const [, setRecentViewedIds] = useState(() => {
     const raw = localStorage.getItem('badgerlease_recent_views');
     if (!raw) return [];
     try {
@@ -26,6 +46,7 @@ function App() {
       return [];
     }
   });
+  const [sessionViewedIds, setSessionViewedIds] = useState([]);
   const [favoritesByUser, setFavoritesByUser] = useState(() => {
     const raw = localStorage.getItem('badgerlease_favorites_by_user');
     if (!raw) return {};
@@ -75,11 +96,56 @@ function App() {
     updateFavorites(savedListings.filter(item => item.id !== listingId));
   };
 
+  const handleDeleteListing = useCallback((listingId) => {
+    setListings((prev) => prev.filter((l) => l.id !== listingId));
+    setRecentViewedIds((prev) => {
+      const next = prev.filter((id) => id !== listingId);
+      localStorage.setItem('badgerlease_recent_views', JSON.stringify(next));
+      return next;
+    });
+    setFavoritesByUser((prevMap) => {
+      const nextMap = {};
+      Object.keys(prevMap).forEach((key) => {
+        nextMap[key] = (prevMap[key] || []).filter((l) => l.id !== listingId);
+      });
+      localStorage.setItem('badgerlease_favorites_by_user', JSON.stringify(nextMap));
+      return nextMap;
+    });
+    setInquiries((prev) => {
+      const next = prev.filter((q) => q.listingId !== listingId);
+      localStorage.setItem('badgerlease_inquiries', JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
   const handleAddListing = (newListing) => {
     setListings((prev) => [newListing, ...prev]);
   };
 
+  const handleRestoreSampleListings = useCallback(() => {
+    setListings(DUMMY_LISTINGS);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(LISTINGS_STORAGE_KEY, JSON.stringify(listings));
+  }, [listings]);
+
+  const listingShareUrl = useCallback((listingId) => {
+    const base = import.meta.env.BASE_URL || '/';
+    const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+    return `${window.location.origin}${normalizedBase}listings/${listingId}`;
+  }, []);
+
+  const handleShareListingUrl = useCallback(async (listingId) => {
+    const url = listingShareUrl(listingId);
+    await navigator.clipboard.writeText(url);
+  }, [listingShareUrl]);
+
   const handleViewedListing = useCallback((listingId) => {
+    setSessionViewedIds((prevIds) => {
+      const nextIds = [listingId, ...prevIds.filter((id) => id !== listingId)].slice(0, 4);
+      return nextIds;
+    });
     setRecentViewedIds((prevIds) => {
       const nextIds = [listingId, ...prevIds.filter((id) => id !== listingId)].slice(0, 4);
       const unchanged =
@@ -92,7 +158,7 @@ function App() {
     });
   }, []);
 
-  const recentListings = recentViewedIds
+  const sessionRecentListings = sessionViewedIds
     .map((id) => listings.find((listing) => listing.id === id))
     .filter(Boolean);
 
@@ -163,7 +229,8 @@ function App() {
                   savedListings={savedListings}
                   onSaveListing={handleSaveListing}
                   isAuthenticated={isAuthenticated}
-                  recentListings={recentListings}
+                  sessionRecentListings={sessionRecentListings}
+                  onRestoreSampleListings={handleRestoreSampleListings}
                 />
               }
             />
@@ -175,6 +242,8 @@ function App() {
                     myListings={myListings}
                     savedListings={savedListings}
                     onRemoveListing={handleRemoveListing}
+                    onDeleteListing={handleDeleteListing}
+                    onShareListingUrl={handleShareListingUrl}
                     inboxInquiries={inboxInquiries}
                     onReplyInquiry={handleReplyInquiry}
                   />

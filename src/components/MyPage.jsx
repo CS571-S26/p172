@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
-import { Badge, Button, Card, Col, Container, Form, Row, Tab, Tabs } from 'react-bootstrap';
+import { Badge, Button, Card, Col, Container, Form, Row, Tab, Tabs, Toast, ToastContainer } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const MyPage = ({ myListings, savedListings, onRemoveListing, inboxInquiries, onReplyInquiry }) => {
+const MyPage = ({
+  myListings,
+  savedListings,
+  onRemoveListing,
+  onDeleteListing,
+  onShareListingUrl,
+  inboxInquiries,
+  onReplyInquiry,
+}) => {
   const [replyMap, setReplyMap] = useState({});
+  const [showShareToast, setShowShareToast] = useState(false);
 
   return (
     <Container className="py-5">
+      <ToastContainer position="bottom-end" className="p-3">
+        <Toast bg="dark" show={showShareToast} autohide delay={1800} onClose={() => setShowShareToast(false)}>
+          <Toast.Body className="text-white">Listing link copied!</Toast.Body>
+        </Toast>
+      </ToastContainer>
       <div className="hero-section py-4 mb-4">
         <h1 className="h2 fw-bold mb-2">My Page</h1>
         <p className="text-secondary mb-0">Manage your postings and favorites in one place.</p>
@@ -37,11 +51,34 @@ const MyPage = ({ myListings, savedListings, onRemoveListing, inboxInquiries, on
                       <Card.Title className="fw-bold">{listing.title}</Card.Title>
                       <p className="text-secondary mb-2">{listing.location}</p>
                       <p className="fw-semibold mb-3">${listing.price}/mo</p>
-                      <Link to={`/listings/${listing.id}`} className="text-decoration-none">
-                        <Button variant="outline-primary" className="w-100 rounded-pill fw-semibold">
-                          View Details
+                      <div className="d-flex flex-column gap-2">
+                        <Link to={`/listings/${listing.id}`} className="text-decoration-none">
+                          <Button variant="outline-primary" className="w-100 rounded-pill fw-semibold">
+                            View Details
+                          </Button>
+                        </Link>
+                        <Button
+                          variant="outline-dark"
+                          className="w-100 rounded-pill fw-semibold"
+                          onClick={async () => {
+                            await onShareListingUrl(listing.id);
+                            setShowShareToast(true);
+                          }}
+                        >
+                          Share listing
                         </Button>
-                      </Link>
+                        <Button
+                          variant="outline-danger"
+                          className="w-100 rounded-pill fw-semibold"
+                          onClick={() => {
+                            if (window.confirm('Delete this listing permanently?')) {
+                              onDeleteListing(listing.id);
+                            }
+                          }}
+                        >
+                          Delete listing
+                        </Button>
+                      </div>
                     </Card.Body>
                   </Card>
                 </Col>
@@ -73,18 +110,30 @@ const MyPage = ({ myListings, savedListings, onRemoveListing, inboxInquiries, on
                     <Card.Body>
                       <Card.Title className="fw-bold">{listing.title}</Card.Title>
                       <p className="text-secondary mb-2">{listing.location}</p>
-                      <div className="d-flex gap-2">
-                        <Link to={`/listings/${listing.id}`} className="text-decoration-none w-50">
-                          <Button variant="outline-primary" className="w-100 rounded-pill fw-semibold">
-                            Open
+                      <div className="d-flex flex-column gap-2">
+                        <div className="d-flex gap-2">
+                          <Link to={`/listings/${listing.id}`} className="text-decoration-none w-50">
+                            <Button variant="outline-primary" className="w-100 rounded-pill fw-semibold">
+                              Open
+                            </Button>
+                          </Link>
+                          <Button
+                            variant="outline-danger"
+                            className="w-50 rounded-pill fw-semibold"
+                            onClick={() => onRemoveListing(listing.id)}
+                          >
+                            Remove
                           </Button>
-                        </Link>
+                        </div>
                         <Button
-                          variant="outline-danger"
-                          className="w-50 rounded-pill fw-semibold"
-                          onClick={() => onRemoveListing(listing.id)}
+                          variant="outline-dark"
+                          className="w-100 rounded-pill fw-semibold"
+                          onClick={async () => {
+                            await onShareListingUrl(listing.id);
+                            setShowShareToast(true);
+                          }}
                         >
-                          Remove
+                          Share listing
                         </Button>
                       </div>
                     </Card.Body>

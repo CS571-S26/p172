@@ -79,16 +79,6 @@ const ListingDetailPage = ({
                                     : `This beautiful property located in ${listing.location} offers a comfortable and spacious living environment. With ${listing.bedrooms} bedroom${listing.bedrooms > 1 ? 's' : ''} and excellent amenities like ${listing.amenities.join(', ')}, it is perfect for anyone looking to find a great place on the BadgerLease marketplace. Reach out to the owner for more details or to schedule a tour!`
                                 }
                             </p>
-                            <Button
-                                variant="outline-dark"
-                                className="rounded-pill fw-semibold mt-2"
-                                onClick={async () => {
-                                    await navigator.clipboard.writeText(window.location.href);
-                                    setShowToast(true);
-                                }}
-                            >
-                                Share Listing
-                            </Button>
                             <ListingChatPanel
                                 listing={listing}
                                 inquiries={inquiries}
@@ -101,6 +91,10 @@ const ListingDetailPage = ({
                                 isSaved={isSaved}
                                 onSaveListing={onSaveListing}
                                 isAuthenticated={isAuthenticated}
+                                onShareListing={async () => {
+                                    await navigator.clipboard.writeText(window.location.href);
+                                    setShowToast(true);
+                                }}
                             />
                         </Col>
                     </Row>

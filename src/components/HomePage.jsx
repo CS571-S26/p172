@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import FilterPanel from './FilterPanel';
 import HeroSection from './HeroSection';
 import EmptyState from './EmptyState';
@@ -8,7 +8,14 @@ import CompareBar from './CompareBar';
 import CompareModal from './CompareModal';
 import { calculateMatchScore } from '../utils/matchScore';
 
-const HomePage = ({ listings, savedListings, onSaveListing, isAuthenticated, recentListings }) => {
+const HomePage = ({
+    listings,
+    savedListings,
+    onSaveListing,
+    isAuthenticated,
+    sessionRecentListings,
+    onRestoreSampleListings,
+}) => {
     const initialFilters = {
         query: '',
         maxPrice: '',
@@ -114,11 +121,11 @@ const HomePage = ({ listings, savedListings, onSaveListing, isAuthenticated, rec
                     listings={comparedListings}
                 />
 
-                {recentListings.length > 0 && (
+                {(sessionRecentListings || []).length > 0 && (
                     <section className="mb-5">
                         <h2 className="h4 fw-bold mb-3">Recently Viewed</h2>
                         <ListingGrid
-                            listings={recentListings}
+                            listings={sessionRecentListings}
                             savedListings={savedListings}
                             onSaveListing={onSaveListing}
                             isAuthenticated={isAuthenticated}
@@ -138,10 +145,22 @@ const HomePage = ({ listings, savedListings, onSaveListing, isAuthenticated, rec
                 </Row>
 
                 {filteredListings.length === 0 ? (
-                    <EmptyState
-                        title="No listings found"
-                        description="Try adjusting your filters to see more results."
-                    />
+                    listings.length === 0 ? (
+                        <div className="text-center py-5 glass-panel rounded-4">
+                            <h2 className="h4 fw-bold mb-2">No listings in the marketplace</h2>
+                            <p className="text-secondary mb-4">
+                                If you deleted demo listings while testing, you can reload the original sample set.
+                            </p>
+                            <Button className="btn-premium px-4" onClick={onRestoreSampleListings}>
+                                Reload sample listings
+                            </Button>
+                        </div>
+                    ) : (
+                        <EmptyState
+                            title="No listings found"
+                            description="Try adjusting your filters to see more results."
+                        />
+                    )
                 ) : (
                     <ListingGrid
                         listings={filteredListings}

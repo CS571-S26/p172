@@ -141,5 +141,23 @@ export const DUMMY_LISTINGS = [
         endDate: "2026-08-15",
         contactEmail: "univ.apts@gmail.com",
         roommatePrefs: { petFriendly: true, smokingAllowed: false, studyFriendly: true }
+    },
+    {
+        id: 9,
+        title: "Downtown 1BR with Study Nook",
+        price: 1150,
+        bedrooms: 1,
+        location: "Downtown Madison",
+        amenities: ["Pet Friendly", "Quiet Floor", "In-unit Laundry"],
+        description: "Modern 1-bedroom in downtown with a dedicated study nook and quiet-floor policy. Great for students who want walkable access and a focused living environment.",
+        images: [
+            "https://images.pexels.com/photos/1743229/pexels-photo-1743229.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/6032417/pexels-photo-6032417.jpeg?auto=compress&cs=tinysrgb&w=1200",
+            "https://images.pexels.com/photos/6489083/pexels-photo-6489083.jpeg?auto=compress&cs=tinysrgb&w=1200"
+        ],
+        startDate: "2026-07-01",
+        endDate: "2027-05-31",
+        contactEmail: "downtown1br@wisc.edu",
+        roommatePrefs: { petFriendly: true, smokingAllowed: false, studyFriendly: true }
     }
 ];

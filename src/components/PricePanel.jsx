@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const PricePanel = ({ listing, isSaved, onSaveListing, isAuthenticated }) => {
+const PricePanel = ({ listing, isSaved, onSaveListing, isAuthenticated, onShareListing }) => {
   return (
     <Card className="border-0 shadow-sm rounded-4 bg-light p-4 h-100">
       <h2 className="h5 text-secondary fw-semibold">Monthly Rent</h2>
@@ -30,8 +30,13 @@ const PricePanel = ({ listing, isSaved, onSaveListing, isAuthenticated }) => {
             </Button>
           </Link>
         )}
-        <Button variant="dark" className="w-100 rounded-pill py-3 fw-bold fs-5 shadow-sm" disabled>
-          Contact via In-app Messaging
+        <Button
+          type="button"
+          variant="outline-dark"
+          className="w-100 rounded-pill py-3 fw-semibold fs-6"
+          onClick={() => onShareListing?.()}
+        >
+          Share listing
         </Button>
       </div>
     </Card>
